@@ -252,6 +252,12 @@ SandgemTownLab_ObtainPokedex:
     Message SandgemTownLab_Text_PlayerObtainedThePokedex
     PlayFanfare SEQ_FANFA4
     WaitFanfare
+    SetNationalDexEnabled
+    BufferPlayerName 0
+    Message SandgemTownLab_Text_GiftOfTheShinyCharm
+    SetVar VAR_0x8004, ITEM_SHINY_CHARM
+    SetVar VAR_0x8005, 1
+    Common_GiveItemQuantity
     BufferPlayerName 0
     Message SandgemTownLab_Text_MeetEveryKindOfPokemon
     CloseMessage
@@ -511,6 +517,8 @@ SandgemTownLab_SoYouveSeenAllPokemon:
     End
 
 SandgemTownLab_EnableNationalDex:
+    GetNationalDexEnabled VAR_RESULT
+    GoToIfEq VAR_RESULT, TRUE, SandgemTownLab_GiveSinnohDexReward
     GetPlayerDir VAR_0x8007
     CallIfEq VAR_0x8007, DIR_NORTH, SandgemTownLab_PlayerWalkFromSouthToSouthFromProfRowan
     CallIfEq VAR_0x8007, DIR_SOUTH, SandgemTownLab_PlayerWalkFromNorthToSouthFromProfRowan
@@ -557,6 +565,10 @@ SandgemTownLab_EnableNationalDex:
     WaitTime 15, VAR_RESULT
     ApplyMovement LOCALID_PLAYER, SandgemTownLab_Movement_PlayerWalkBackToProfRowan
     WaitMovement
+    GoTo SandgemTownLab_GiveSinnohDexReward
+    End
+
+SandgemTownLab_GiveSinnohDexReward:
     BufferPlayerName 0
     Message SandgemTownLab_Text_GiftForCompletingSinnohPokedex
     SetVar VAR_0x8004, ITEM_POKE_RADAR

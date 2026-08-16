@@ -84,6 +84,7 @@
     ScriptEntry CommonScript_SetLookerBGM @ 0x807
     ScriptEntry CommonScript_FadeToDefaultMusic @ 0x808
     ScriptEntry CommonScript_GriseousOrbCouldNotBeRemoved @ 0x809
+    ScriptEntry CommonScript_ToggleShinyCharm @ 0x80A
     ScriptEntryEnd
 
 CommonScript_Dummy2010:
@@ -1692,6 +1693,24 @@ CommonScript_GriseousOrbCouldNotBeRemoved:
     CloseMessage
     ReleaseAll
     ReturnCommonScript
+    End
+
+CommonScript_ToggleShinyCharm:
+    LockAll
+    GoToIfSet FLAG_UNK_0x0FFF, CommonScript_DeactivateShinyCharm
+    SetFlag FLAG_UNK_0x0FFF
+    Message CommonStrings_Text_ShinyCharmActivated
+    WaitButton
+    CloseMessage
+    ReleaseAll
+    End
+
+CommonScript_DeactivateShinyCharm:
+    ClearFlag FLAG_UNK_0x0FFF
+    Message CommonStrings_Text_ShinyCharmDeactivated
+    WaitButton
+    CloseMessage
+    ReleaseAll
     End
 
     .balign 4, 0
