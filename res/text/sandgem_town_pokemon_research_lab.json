@@ -378,12 +378,24 @@
         "of timing.\r",
         "You see, I had an errand to run for\n",
         "Professor Rowan on my visit here.\r",
-        "He’d asked me to bring the data\n",
-        "for the National Pokédex, you see.\r",
-        "So, since you’re here, let me upgrade\n",
-        "your Pokédex with the National Mode.\r",
-        "After all, there are many kinds of\n",
-        "Pokémon in this world of ours!\r"
+        "He’d also asked me to pass along a\n",
+        "letter that arrived for you.\r",
+        "So, since you’re here, allow me to\n",
+        "hand it over myself.\r",
+        "After all, I hear it concerns a rather\n",
+        "unusual Pokémon.\r"
+      ]
+    },
+    {
+      "id": "SandgemTownLab_Text_OaksLetterExplanation",
+      "en_US": [
+        "Oak: It’s from a colleague of mine who\n",
+        "studies a Pokémon shrouded in myth.\r",
+        "She believes you might be just the\n",
+        "Trainer to help her find it.\r",
+        "Hold onto that letter--I have a\n",
+        "feeling it will lead you somewhere\f",
+        "interesting."
       ]
     },
     {

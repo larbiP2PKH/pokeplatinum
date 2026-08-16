@@ -517,8 +517,6 @@ SandgemTownLab_SoYouveSeenAllPokemon:
     End
 
 SandgemTownLab_EnableNationalDex:
-    GetNationalDexEnabled VAR_RESULT
-    GoToIfEq VAR_RESULT, TRUE, SandgemTownLab_GiveSinnohDexReward
     GetPlayerDir VAR_0x8007
     CallIfEq VAR_0x8007, DIR_NORTH, SandgemTownLab_PlayerWalkFromSouthToSouthFromProfRowan
     CallIfEq VAR_0x8007, DIR_SOUTH, SandgemTownLab_PlayerWalkFromNorthToSouthFromProfRowan
@@ -544,11 +542,11 @@ SandgemTownLab_EnableNationalDex:
     Message SandgemTownLab_Text_LetMeUpgradeYourPokedex
     CallIfSet FLAG_GAME_COMPLETED, SandgemTownLab_GameCompletedReturn
     CallIfGe VAR_FIGHT_AREA_STATE, 2, SandgemTownLab_HideFightAreaBlockade
-    SetNationalDexEnabled
+    Message SandgemTownLab_Text_OaksLetterExplanation
     BufferPlayerName 0
-    PlayFanfare SEQ_FANFA4
-    Message SandgemTownLab_Text_PokedexUpgradedWithNationalMode
-    WaitFanfare
+    SetVar VAR_0x8004, ITEM_OAKS_LETTER
+    SetVar VAR_0x8005, 1
+    Common_GiveItemQuantity
     Message SandgemTownLab_Text_WontBeEasyToComplete
     Message SandgemTownLab_Text_PlayerWillGetTheJobDone
     Message SandgemTownLab_Text_PalParkIsNowOpen
