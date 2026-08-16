@@ -45,6 +45,7 @@ static void PrintStringToWindow(PokemonSummaryScreen *summaryScreen, Window *win
 static void PrintTextToStaticWindow(PokemonSummaryScreen *summaryScreen, enum SummaryStaticWindow windowIndex, u32 entryID, TextColor color, enum SummaryTextAlignment alignment);
 static void PrintStaticWindows(PokemonSummaryScreen *summaryScreen);
 static void PrintMoveNameAndPP(PokemonSummaryScreen *summaryScreen, u32 moveIndex);
+static void PrintStatEvIvValue(PokemonSummaryScreen *summaryScreen, u32 windowIndex, u16 ev, u16 iv, u16 stat, u32 windowWidthPx);
 static void DrawInfoPageWindows(PokemonSummaryScreen *summaryScreen);
 static void DrawMemoPageWindows(PokemonSummaryScreen *summaryScreen);
 static void DrawSkillsPageWindows(PokemonSummaryScreen *summaryScreen);
@@ -462,48 +463,48 @@ static const WindowTemplate sExtraWindowTemplates_Skills[] = {
     },
     [SUMMARY_WINDOW_ATTACK] = {
         .bgLayer = BG_LAYER_MAIN_1,
-        .tilemapLeft = 25,
+        .tilemapLeft = 23,
         .tilemapTop = 7,
-        .width = 3,
+        .width = 7,
         .height = 2,
         .palette = 15,
         .baseTile = 0x249,
     },
     [SUMMARY_WINDOW_DEFENSE] = {
         .bgLayer = BG_LAYER_MAIN_1,
-        .tilemapLeft = 25,
+        .tilemapLeft = 23,
         .tilemapTop = 9,
-        .width = 3,
+        .width = 7,
         .height = 2,
         .palette = 15,
-        .baseTile = 0x24F,
+        .baseTile = 0x257,
     },
     [SUMMARY_WINDOW_SP_ATTACK] = {
         .bgLayer = BG_LAYER_MAIN_1,
-        .tilemapLeft = 25,
+        .tilemapLeft = 23,
         .tilemapTop = 11,
-        .width = 3,
+        .width = 7,
         .height = 2,
         .palette = 15,
-        .baseTile = 0x255,
+        .baseTile = 0x265,
     },
     [SUMMARY_WINDOW_SP_DEFENSE] = {
         .bgLayer = BG_LAYER_MAIN_1,
-        .tilemapLeft = 25,
+        .tilemapLeft = 23,
         .tilemapTop = 13,
-        .width = 3,
+        .width = 7,
         .height = 2,
         .palette = 15,
-        .baseTile = 0x25B,
+        .baseTile = 0x273,
     },
     [SUMMARY_WINDOW_SPEED] = {
         .bgLayer = BG_LAYER_MAIN_1,
-        .tilemapLeft = 25,
+        .tilemapLeft = 23,
         .tilemapTop = 15,
-        .width = 3,
+        .width = 7,
         .height = 2,
         .palette = 15,
-        .baseTile = 0x261,
+        .baseTile = 0x281,
     },
     [SUMMARY_WINDOW_ABILITY] = {
         .bgLayer = BG_LAYER_MAIN_1,
@@ -512,7 +513,7 @@ static const WindowTemplate sExtraWindowTemplates_Skills[] = {
         .width = 11,
         .height = 2,
         .palette = 15,
-        .baseTile = 0x267,
+        .baseTile = 0x28F,
     },
     [SUMMARY_WINDOW_ABILITY_DESCRIPTION] = {
         .bgLayer = BG_LAYER_MAIN_1,
@@ -521,7 +522,16 @@ static const WindowTemplate sExtraWindowTemplates_Skills[] = {
         .width = 18,
         .height = 4,
         .palette = 15,
-        .baseTile = 0x27D,
+        .baseTile = 0x2A5,
+    },
+    [SUMMARY_WINDOW_STATS_COLUMN_HEADER] = {
+        .bgLayer = BG_LAYER_MAIN_1,
+        .tilemapLeft = 23,
+        .tilemapTop = 6,
+        .width = 7,
+        .height = 1,
+        .palette = 15,
+        .baseTile = 0x2ED,
     },
 };
 
@@ -956,6 +966,26 @@ static void PrintCurrentAndMaxInfo(PokemonSummaryScreen *summaryScreen, u32 move
     Text_AddPrinterWithParamsAndColor(window, FONT_SYSTEM, summaryScreen->string, maxXOffset, yOffset, TEXT_SPEED_NO_TRANSFER, SUMMARY_TEXT_BLACK, NULL);
 }
 
+// Prints EV, IV, and final Stat right-aligned in three even columns spanning the window's width.
+static void PrintStatEvIvValue(PokemonSummaryScreen *summaryScreen, u32 windowIndex, u16 ev, u16 iv, u16 stat, u32 windowWidthPx)
+{
+    Window *window = &summaryScreen->extraWindows[windowIndex];
+    u32 columnWidth = windowWidthPx / 3;
+    u32 strWidth;
+
+    SetAndFormatNumberBuf(summaryScreen, PokemonSummary_Text_TemplateAttack, ev, 3, PADDING_MODE_NONE);
+    strWidth = Font_CalcStringWidth(FONT_SYSTEM, summaryScreen->string, 0);
+    Text_AddPrinterWithParamsAndColor(window, FONT_SYSTEM, summaryScreen->string, columnWidth - strWidth, 0, TEXT_SPEED_NO_TRANSFER, SUMMARY_TEXT_BLACK, NULL);
+
+    SetAndFormatNumberBuf(summaryScreen, PokemonSummary_Text_TemplateAttack, iv, 2, PADDING_MODE_NONE);
+    strWidth = Font_CalcStringWidth(FONT_SYSTEM, summaryScreen->string, 0);
+    Text_AddPrinterWithParamsAndColor(window, FONT_SYSTEM, summaryScreen->string, columnWidth * 2 - strWidth, 0, TEXT_SPEED_NO_TRANSFER, SUMMARY_TEXT_BLACK, NULL);
+
+    SetAndFormatNumberBuf(summaryScreen, PokemonSummary_Text_TemplateAttack, stat, 3, PADDING_MODE_NONE);
+    strWidth = Font_CalcStringWidth(FONT_SYSTEM, summaryScreen->string, 0);
+    Text_AddPrinterWithParamsAndColor(window, FONT_SYSTEM, summaryScreen->string, windowWidthPx - strWidth, 0, TEXT_SPEED_NO_TRANSFER, SUMMARY_TEXT_BLACK, NULL);
+}
+
 static void PrintStaticWindows(PokemonSummaryScreen *summaryScreen)
 {
     PrintTextToStaticWindow(summaryScreen, SUMMARY_WINDOW_LABEL_INFO, PokemonSummary_Text_PageTitleInfo, SUMMARY_TEXT_WHITE, ALIGN_LEFT);
@@ -1161,20 +1191,35 @@ static void DrawSkillsPageWindows(PokemonSummaryScreen *summaryScreen)
     Window_FillTilemap(&summaryScreen->extraWindows[SUMMARY_WINDOW_SPEED], 0);
     Window_FillTilemap(&summaryScreen->extraWindows[SUMMARY_WINDOW_ABILITY], 0);
     Window_FillTilemap(&summaryScreen->extraWindows[SUMMARY_WINDOW_ABILITY_DESCRIPTION], 0);
+    Window_FillTilemap(&summaryScreen->extraWindows[SUMMARY_WINDOW_STATS_COLUMN_HEADER], 0);
 
     u32 hpWindowWidth = Window_GetWidth(&summaryScreen->extraWindows[SUMMARY_WINDOW_HP]) * 8;
+    u32 statColumnWindowWidth = Window_GetWidth(&summaryScreen->extraWindows[SUMMARY_WINDOW_ATTACK]) * 8;
+    u32 statColumnWidth = statColumnWindowWidth / 3;
+
+    {
+        Window *headerWindow = &summaryScreen->extraWindows[SUMMARY_WINDOW_STATS_COLUMN_HEADER];
+        u32 strWidth;
+
+        MessageLoader_GetString(summaryScreen->msgLoader, PokemonSummary_Text_LabelEV, summaryScreen->string);
+        strWidth = Font_CalcStringWidth(FONT_SYSTEM, summaryScreen->string, 0);
+        Text_AddPrinterWithParamsAndColor(headerWindow, FONT_SYSTEM, summaryScreen->string, statColumnWidth - strWidth, 0, TEXT_SPEED_NO_TRANSFER, SUMMARY_TEXT_WHITE, NULL);
+
+        MessageLoader_GetString(summaryScreen->msgLoader, PokemonSummary_Text_LabelIV, summaryScreen->string);
+        strWidth = Font_CalcStringWidth(FONT_SYSTEM, summaryScreen->string, 0);
+        Text_AddPrinterWithParamsAndColor(headerWindow, FONT_SYSTEM, summaryScreen->string, statColumnWidth * 2 - strWidth, 0, TEXT_SPEED_NO_TRANSFER, SUMMARY_TEXT_WHITE, NULL);
+
+        MessageLoader_GetString(summaryScreen->msgLoader, PokemonSummary_Text_LabelStat, summaryScreen->string);
+        strWidth = Font_CalcStringWidth(FONT_SYSTEM, summaryScreen->string, 0);
+        Text_AddPrinterWithParamsAndColor(headerWindow, FONT_SYSTEM, summaryScreen->string, statColumnWindowWidth - strWidth, 0, TEXT_SPEED_NO_TRANSFER, SUMMARY_TEXT_WHITE, NULL);
+    }
 
     PrintCurrentAndMaxInfo(summaryScreen, 0, PokemonSummary_Text_Slash, PokemonSummary_Text_TemplateCurrentHp, PokemonSummary_Text_TemplateMaxHp, summaryScreen->monData.curHP, summaryScreen->monData.maxHP, 3, hpWindowWidth / 2, 0);
-    SetAndFormatNumberBuf(summaryScreen, PokemonSummary_Text_TemplateAttack, summaryScreen->monData.attack, 3, PADDING_MODE_NONE);
-    PrintStringToWindow(summaryScreen, &summaryScreen->extraWindows[SUMMARY_WINDOW_ATTACK], SUMMARY_TEXT_BLACK, ALIGN_RIGHT);
-    SetAndFormatNumberBuf(summaryScreen, PokemonSummary_Text_TemplateDefense, summaryScreen->monData.defense, 3, PADDING_MODE_NONE);
-    PrintStringToWindow(summaryScreen, &summaryScreen->extraWindows[SUMMARY_WINDOW_DEFENSE], SUMMARY_TEXT_BLACK, ALIGN_RIGHT);
-    SetAndFormatNumberBuf(summaryScreen, PokemonSummary_Text_TemplateSpAttack, summaryScreen->monData.spAttack, 3, PADDING_MODE_NONE);
-    PrintStringToWindow(summaryScreen, &summaryScreen->extraWindows[SUMMARY_WINDOW_SP_ATTACK], SUMMARY_TEXT_BLACK, ALIGN_RIGHT);
-    SetAndFormatNumberBuf(summaryScreen, PokemonSummary_Text_TemplateSpDefense, summaryScreen->monData.spDefense, 3, PADDING_MODE_NONE);
-    PrintStringToWindow(summaryScreen, &summaryScreen->extraWindows[SUMMARY_WINDOW_SP_DEFENSE], SUMMARY_TEXT_BLACK, ALIGN_RIGHT);
-    SetAndFormatNumberBuf(summaryScreen, PokemonSummary_Text_TemplateSpeed, summaryScreen->monData.speed, 3, PADDING_MODE_NONE);
-    PrintStringToWindow(summaryScreen, &summaryScreen->extraWindows[SUMMARY_WINDOW_SPEED], SUMMARY_TEXT_BLACK, ALIGN_RIGHT);
+    PrintStatEvIvValue(summaryScreen, SUMMARY_WINDOW_ATTACK, summaryScreen->monData.attackEV, summaryScreen->monData.attackIV, summaryScreen->monData.attack, statColumnWindowWidth);
+    PrintStatEvIvValue(summaryScreen, SUMMARY_WINDOW_DEFENSE, summaryScreen->monData.defenseEV, summaryScreen->monData.defenseIV, summaryScreen->monData.defense, statColumnWindowWidth);
+    PrintStatEvIvValue(summaryScreen, SUMMARY_WINDOW_SP_ATTACK, summaryScreen->monData.spAttackEV, summaryScreen->monData.spAttackIV, summaryScreen->monData.spAttack, statColumnWindowWidth);
+    PrintStatEvIvValue(summaryScreen, SUMMARY_WINDOW_SP_DEFENSE, summaryScreen->monData.spDefenseEV, summaryScreen->monData.spDefenseIV, summaryScreen->monData.spDefense, statColumnWindowWidth);
+    PrintStatEvIvValue(summaryScreen, SUMMARY_WINDOW_SPEED, summaryScreen->monData.speedEV, summaryScreen->monData.speedIV, summaryScreen->monData.speed, statColumnWindowWidth);
 
     StringTemplate_SetAbilityName(summaryScreen->strFormatter, 0, summaryScreen->monData.ability);
     String *buf = MessageLoader_GetNewString(summaryScreen->msgLoader, PokemonSummary_Text_TemplateAbility);
@@ -1195,6 +1240,7 @@ static void DrawSkillsPageWindows(PokemonSummaryScreen *summaryScreen)
     Window_ScheduleCopyToVRAM(&summaryScreen->extraWindows[SUMMARY_WINDOW_SPEED]);
     Window_ScheduleCopyToVRAM(&summaryScreen->extraWindows[SUMMARY_WINDOW_ABILITY]);
     Window_ScheduleCopyToVRAM(&summaryScreen->extraWindows[SUMMARY_WINDOW_ABILITY_DESCRIPTION]);
+    Window_ScheduleCopyToVRAM(&summaryScreen->extraWindows[SUMMARY_WINDOW_STATS_COLUMN_HEADER]);
 }
 
 static void DrawConditionPageWindows(PokemonSummaryScreen *summaryScreen)

@@ -614,6 +614,18 @@
       "en_US": "Ability"
     },
     {
+      "id": "PokemonSummary_Text_LabelEV",
+      "en_US": "EV"
+    },
+    {
+      "id": "PokemonSummary_Text_LabelIV",
+      "en_US": "IV"
+    },
+    {
+      "id": "PokemonSummary_Text_LabelStat",
+      "en_US": "Stat"
+    },
+    {
       "id": "PokemonSummary_Text_Slash",
       "en_US": "/"
     },

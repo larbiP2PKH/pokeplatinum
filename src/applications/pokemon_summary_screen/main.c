@@ -1107,6 +1107,17 @@ static void SetMonDataFromMon(PokemonSummaryScreen *summaryScreen, Pokemon *mon,
     monData->ability = Pokemon_GetValue(mon, MON_DATA_ABILITY, NULL);
     monData->nature = Pokemon_GetNature(mon);
 
+    monData->attackEV = Pokemon_GetValue(mon, MON_DATA_ATK_EV, NULL);
+    monData->defenseEV = Pokemon_GetValue(mon, MON_DATA_DEF_EV, NULL);
+    monData->spAttackEV = Pokemon_GetValue(mon, MON_DATA_SPATK_EV, NULL);
+    monData->spDefenseEV = Pokemon_GetValue(mon, MON_DATA_SPDEF_EV, NULL);
+    monData->speedEV = Pokemon_GetValue(mon, MON_DATA_SPEED_EV, NULL);
+    monData->attackIV = Pokemon_GetValue(mon, MON_DATA_ATK_IV, NULL);
+    monData->defenseIV = Pokemon_GetValue(mon, MON_DATA_DEF_IV, NULL);
+    monData->spAttackIV = Pokemon_GetValue(mon, MON_DATA_SPATK_IV, NULL);
+    monData->spDefenseIV = Pokemon_GetValue(mon, MON_DATA_SPDEF_IV, NULL);
+    monData->speedIV = Pokemon_GetValue(mon, MON_DATA_SPEED_IV, NULL);
+
     u16 i;
     u8 maxPP;
     for (i = 0; i < LEARNED_MOVES_MAX; i++) {

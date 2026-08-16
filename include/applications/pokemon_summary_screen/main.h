@@ -136,6 +136,7 @@ enum SummaryExtraWindowSkills {
     SUMMARY_WINDOW_SPEED,
     SUMMARY_WINDOW_ABILITY,
     SUMMARY_WINDOW_ABILITY_DESCRIPTION,
+    SUMMARY_WINDOW_STATS_COLUMN_HEADER,
 
     SUMMARY_SKILLS_WINDOW_MAX,
 };
@@ -374,6 +375,17 @@ typedef struct PokemonSummaryMonData {
     u16 speed;
     u8 ability;
     u8 nature;
+
+    u8 attackEV;
+    u8 defenseEV;
+    u8 spAttackEV;
+    u8 spDefenseEV;
+    u8 speedEV;
+    u8 attackIV;
+    u8 defenseIV;
+    u8 spAttackIV;
+    u8 spDefenseIV;
+    u8 speedIV;
 
     u16 moves[LEARNED_MOVES_MAX];
     u8 curPP[LEARNED_MOVES_MAX];
