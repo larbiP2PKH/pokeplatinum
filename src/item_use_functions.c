@@ -95,6 +95,7 @@ static void UseEscapeRopeFromMenu(ItemMenuUseContext *usageContext, const ItemUs
 static void UseAzureFluteFromMenu(ItemMenuUseContext *usageContext, const ItemUseContext *additionalContext);
 static void UseVsRecorderFromMenu(ItemMenuUseContext *usageContext, const ItemUseContext *additionalContext);
 static void UseGracideaFromMenu(ItemMenuUseContext *usageContext, const ItemUseContext *additionalContext);
+static void UseShinyCharmFromMenu(ItemMenuUseContext *usageContext, const ItemUseContext *additionalContext);
 static BOOL UseBicycleInField(ItemFieldUseContext *usageContext);
 static BOOL UseJournalInField(ItemFieldUseContext *usageContext);
 static BOOL UseOldRodInField(ItemFieldUseContext *usageContext);
@@ -111,6 +112,7 @@ static BOOL UseVsSeekerInField(ItemFieldUseContext *usageContext);
 static BOOL UseAzureFluteInField(ItemFieldUseContext *usageContext);
 static BOOL UseVsRecorderInField(ItemFieldUseContext *usageContext);
 static BOOL UseGracideaInField(ItemFieldUseContext *usageContext);
+static BOOL UseShinyCharmInField(ItemFieldUseContext *usageContext);
 static void *sub_02068BEC(void *some_param);
 static void *sub_02068B9C(void *some_param);
 static void *sub_02068708(void *some_param);
@@ -162,6 +164,7 @@ static const ItemUseFuncDat sItemUseFuncs[] = {
     [ITEM_USE_FUNC_AZURE_FLUTE]  = { UseAzureFluteFromMenu,  UseAzureFluteInField,  CanUseAzureFlute  },
     [ITEM_USE_FUNC_VS_RECORDER]  = { UseVsRecorderFromMenu,  UseVsRecorderInField,  NULL              },
     [ITEM_USE_FUNC_GRACIDEA]     = { UseGracideaFromMenu,    UseGracideaInField,    NULL              },
+    [ITEM_USE_FUNC_SHINY_CHARM]  = { UseShinyCharmFromMenu,  UseShinyCharmInField,  NULL              },
 };
 // clang-format on
 
@@ -967,6 +970,17 @@ static void UseAzureFluteFromMenu(ItemMenuUseContext *usageContext, const ItemUs
 static BOOL UseAzureFluteInField(ItemFieldUseContext *usageContext)
 {
     sub_02068584(usageContext, SCRIPT_ID(COMMON_SCRIPTS, 39));
+    return FALSE;
+}
+
+static void UseShinyCharmFromMenu(ItemMenuUseContext *usageContext, const ItemUseContext *additionalContext)
+{
+    sub_02068540(usageContext, additionalContext, SCRIPT_ID(COMMON_SCRIPTS, 58));
+}
+
+static BOOL UseShinyCharmInField(ItemFieldUseContext *usageContext)
+{
+    sub_02068584(usageContext, SCRIPT_ID(COMMON_SCRIPTS, 58));
     return FALSE;
 }
 
