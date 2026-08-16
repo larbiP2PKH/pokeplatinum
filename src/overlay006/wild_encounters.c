@@ -78,6 +78,7 @@ typedef struct WildEncounters_FieldParams {
     u8 firstMonAbility;
     u8 encounterRatesForms[2]; // from encounterData. Only used for Shellos/Gastrodon
     u8 unownTableID;
+    BOOL shinyCharmActive;
 } WildEncounters_FieldParams;
 
 typedef struct UnownFormsGroup {
@@ -1044,8 +1045,15 @@ static void CreateWildMonShinyWithGenderOrNature(const u16 species, const u8 lev
     Heap_Free(newEncounter);
 }
 
+#define SHINY_CHARM_ODDS 500
+
 static void CreateWildMon(u16 species, u8 level, const int partyDest, const WildEncounters_FieldParams *encounterFieldParams, Pokemon *firstPartyMon, FieldBattleDTO *battleParams)
 {
+    if (encounterFieldParams->shinyCharmActive && LCRNG_RandMod(SHINY_CHARM_ODDS) == 0) {
+        CreateWildMonShinyWithGenderOrNature(species, level, partyDest, encounterFieldParams->trainerID, encounterFieldParams, firstPartyMon, battleParams);
+        return;
+    }
+
     Pokemon *newEncounter = Pokemon_New(HEAP_ID_FIELD2);
     Pokemon_Init(newEncounter);
     BOOL hasRandomGender = TRUE;
@@ -1545,4 +1553,5 @@ static void InitEncounterFieldParams(FieldSystem *fieldSystem, Pokemon *firstPar
     }
 
     encounterFieldParams->trainerID = TrainerInfo_ID(SaveData_GetTrainerInfo(fieldSystem->saveData));
+    encounterFieldParams->shinyCharmActive = VarsFlags_CheckFlag(SaveData_GetVarsFlags(fieldSystem->saveData), FLAG_UNK_0x0FFF);
 }
