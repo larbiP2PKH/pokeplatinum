@@ -873,6 +873,21 @@
         "It will be fixed if you enter the\n",
         "Hall of Fame again.\r"
       ]
+    },
+    {
+      "id": "CommonStrings_Text_ShinyCharmActivated",
+      "en_US": [
+        "The Shiny Charm’s power surges...\n",
+        "Its shimmer will now draw out more\n",
+        "Shiny Pokémon!"
+      ]
+    },
+    {
+      "id": "CommonStrings_Text_ShinyCharmDeactivated",
+      "en_US": [
+        "The Shiny Charm’s shimmer fades...\r",
+        "Its power is now switched off."
+      ]
     }
   ]
 }
