@@ -145,6 +145,21 @@
       ]
     },
     {
+      "id": "SandgemTownLab_Text_GiftOfTheShinyCharm",
+      "en_US": [
+        "Rowan: Oh, and one more thing,\n",
+        "{STRVAR_1 3, 0, 0}.\r",
+        "I’ve enabled the National Mode on\n",
+        "your Pokédex, and I want you to have\n",
+        "this, as well.\r",
+        "It’s called a {COLOR 1}Shiny Charm{COLOR 0}.\n",
+        "Legend says it draws out Pokémon of\n",
+        "unusual color.\r",
+        "You can switch its power on or off\n",
+        "any time from your Bag."
+      ]
+    },
+    {
       "id": "SandgemTownLab_Text_MeetEveryKindOfPokemon",
       "en_US": [
         "Rowan: That Pokédex is a very\n",
